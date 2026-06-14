@@ -1,0 +1,27 @@
+# Weekend 8 (and full series) dependencies.
+# The neural models need a Torch-enabled darts install: u8darts[torch].
+# Pin major versions loosely; these are the families the code imports.
+
+# Core data / numerics
+numpy
+pandas
+scipy            # Diebold-Mariano test (scipy.stats)
+
+# Plotting
+matplotlib
+seaborn
+
+# Classical / statistical
+statsmodels      # SARIMA (SARIMAX)
+
+# Gradient boosting
+xgboost
+lightgbm
+
+# Deep learning forecasting (darts + torch backend)
+u8darts[torch]   # provides darts + pytorch-lightning + torch
+# If the bracket extra gives trouble on your platform, install explicitly:
+#   pip install u8darts torch pytorch-lightning
+
+# Hyperparameter optimization
+optuna
