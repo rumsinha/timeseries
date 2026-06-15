@@ -61,17 +61,27 @@ def plot_cv_fold_diagram(save_path: Path):
         ("Fold 3", 2009, 2014, 2015),
         ("Final",  2009, 2015, 2016),
     ]
+    seen = set()  # ensures each legend label is registered exactly once
+
+    def once(key):
+        # Return the label the first time we see it, None afterwards, so the
+        # legend lists Train / Validate / Test (sealed) one time each.
+        if key in seen:
+            return None
+        seen.add(key)
+        return key
+
     for i, (label, tr_s, tr_e, va) in enumerate(rows):
         y = len(rows) - i
         # training span
         ax.barh(y, tr_e - tr_s + 1, left=tr_s, height=0.6,
-                color="#4C78A8", alpha=0.85,
-                label="Train" if i == 0 else None)
-        # validation / test year
+                color="#4C78A8", alpha=0.85, label=once("Train"))
+        # validation / test year — label by WHAT THE BAR IS, not the row index
         is_test = (label == "Final")
+        bar_kind = "Test (sealed)" if is_test else "Validate"
         ax.barh(y, 1, left=va, height=0.6,
                 color="#C04A4A" if is_test else "#E89B3B", alpha=0.9,
-                label=("Test (sealed)" if is_test else "Validate") if i <= 1 else None)
+                label=once(bar_kind))
         ax.text(tr_s - 0.15, y, label, ha="right", va="center", fontsize=10)
 
     ax.set_xlim(2008.3, 2017)
